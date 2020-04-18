@@ -1,6 +1,5 @@
 FROM ubuntu:18.04 as base
 
-
 # Install common packages required
 FROM base as image_build
 
@@ -17,10 +16,9 @@ RUN	sed -i 's/in_target mount -t proc/#in_target mount -t proc/g' /usr/share/deb
 # Master Raspbian Repo from https://www.raspbian.org/RaspbianRepository
 RUN wget --no-check-certificate https://archive.raspbian.org/raspbian.public.key -O - | apt-key add -q
 
-
 ############################## Build slim #####################################################
 
-FROM image_build as slim_builder
+FROM image_build as buster_slim_builder
 
 RUN qemu-debootstrap --variant='minbase' \
                     --keyring=/etc/apt/trusted.gpg \
@@ -32,14 +30,13 @@ RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free 
 CMD ["chroot", "rpi_rootfs/", "/bin/bash"]
 
 # Create minimal boot file
-FROM scratch as slim
-COPY --from=slim_builder /rpi_rootfs /
+FROM scratch as buster_slim
+COPY --from=buster_slim_builder /rpi_rootfs /
 CMD ["/bin/bash"]
-
 
 ############################## Build latest #####################################################
 
-FROM image_build as latest_builder
+FROM image_build as buster_latest_builder
 
 RUN qemu-debootstrap --variant='buildd' \
                     --keyring=/etc/apt/trusted.gpg \
@@ -51,12 +48,27 @@ RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free 
 CMD ["chroot", "rpi_rootfs/", "/bin/bash"]
 
 # Create minimal boot file
-FROM scratch as slim
-COPY --from=latest_builder /rpi_rootfs /
+FROM scratch as buster_latest
+COPY --from=buster_latest_builder /rpi_rootfs /
 CMD ["/bin/bash"]
 
 ############################## Build faithful #####################################################
 
+FROM image_build as buster_faithful_builder
+
+RUN qemu-debootstrap --variant='buildd' \
+                    --keyring=/etc/apt/trusted.gpg \
+                    --include=libopenblas-dev,libblas-dev,cmake,python3-dev,git,python3-pip,python3-setuptools \
+                    --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian 
+
+RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free rpi" >> /rpi_rootfs/etc/apt/sources.list
+
+CMD ["chroot", "rpi_rootfs/", "/bin/bash"]
+
+# Create minimal boot file
+FROM scratch as buster_faithful
+COPY --from=buster_faithful_builder /rpi_rootfs /
+CMD ["/bin/bash"]
 
 # RUN tar -czvf raspbian_buster_minimal_`date +%Y_%m_%d`.tgz /rpi_rootfs
 
