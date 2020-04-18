@@ -56,9 +56,8 @@ CMD ["/bin/bash"]
 
 FROM image_build as buster_faithful_builder
 
-RUN qemu-debootstrap --variant='buildd' \
-                    --keyring=/etc/apt/trusted.gpg \
-                    --include=libopenblas-dev,libblas-dev,cmake,python3-dev,git,python3-pip,python3-setuptools \
+RUN qemu-debootstrap --keyring=/etc/apt/trusted.gpg \
+                    --include=python3,git,python3-pip \
                     --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian 
 
 RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free rpi" >> /rpi_rootfs/etc/apt/sources.list
