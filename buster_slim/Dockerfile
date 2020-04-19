@@ -1,5 +1,7 @@
 FROM choonkiatlee/qemu-raspbian:image_build as buster_slim_builder
 
+ENV PROOT_NO_SECCOMP 1
+
 RUN debootstrap --variant='minbase' \
                     --foreign --no-check-gpg --include=ca-certificates \
                     --keyring=/etc/apt/trusted.gpg \
