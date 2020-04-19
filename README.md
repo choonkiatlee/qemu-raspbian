@@ -4,17 +4,17 @@ This is a Docker container that allows you to run raspbian using QEMU user mode 
 
 ![Example](recording.svg)
 
-## Available Tags
-All images are available on [DockerHub](https://hub.docker.com/r/choonkiatlee/raspbian)
+## Available Images and Tags
 
-![choonkiatlee/raspbian:buster-slim](https://github.com/choonkiatlee/qemu-raspbian/workflows/choonkiatlee/raspbian:buster-slim/badge.svg)
+All docker images are available on [DockerHub](https://hub.docker.com/r/choonkiatlee/raspbian)
 
-![choonkiatlee/raspbian:buster-build](https://github.com/choonkiatlee/qemu-raspbian/workflows/choonkiatlee/raspbian:buster-build/badge.svg)
+|Tag|Description|
+|:---:|:---:|
+|![choonkiatlee/raspbian:slim](https://github.com/choonkiatlee/qemu-raspbian/workflows/choonkiatlee/raspbian:buster-slim/badge.svg) | Minimal variant of Raspbian. Includes only Python3, git + minbase packages | 
+|![choonkiatlee/raspbian:build](https://github.com/choonkiatlee/qemu-raspbian/workflows/choonkiatlee/raspbian:buster-build/badge.svg) | Raspbian with build-essential and blas installed. This is meant for easily building python packages such as numpy and pytorch for the Raspberry Pi |
+|choonkiatlee/raspbian:faithful|Raspbian as distributed by the Raspberry Pi Foundation. The rootfs is extracted from the Raspbian Lite image provided [here]() and modified slightly to run under qemu user mode emulation | |
+|![choonkiatlee/raspbian:latest](https://github.com/choonkiatlee/qemu-raspbian/workflows/choonkiatlee/raspbian:buster-build/badge.svg) | Latest Build variant of Raspbian |
 
-choonkiatlee/raspbian:slim   => Minimal variant of Raspbian. Includes only Python3, git + minbase packages
-choonkiatlee/raspbian:build  => Raspbian with build-essential and blas installed. This is meant for easily building python packages such as numpy and pytorch for the Raspberry Pi
-choonkiatlee/raspbian:faithful => Raspbian as distributed by the Raspberry Pi Foundation. The rootfs is extracted from the Raspbian Lite image provided [here]() and modified slightly to run under qemu user mode emulation.
-choonkiatlee/raspbian:latest => Latest Build variant of Raspbian (Currently Buster)
 
 ## Pre-Requisites
 
