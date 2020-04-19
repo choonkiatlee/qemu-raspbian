@@ -23,7 +23,12 @@ cd ..
 mkdir rpi_mnt
 ls -lh rpi_img/$RPI_IMG_FILENAME
 sudo losetup -f -P --show rpi_img/$RPI_IMG_FILENAME
+sudo losetup --list
+ls /dev/loop0*
+
 sudo mount /dev/loop0p2 -o rw rpi_mnt
+
+# sudo mount /dev/loop0p2 -o rw rpi_mnt
 
 # Copy the quemu-arm-static binary into the image to be produced
 sudo cp /usr/bin/qemu-arm-static rpi_mnt/usr/bin
