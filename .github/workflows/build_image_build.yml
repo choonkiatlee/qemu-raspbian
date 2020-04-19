@@ -1,4 +1,4 @@
-name: choonkiatlee/raspbian:buster-build
+name: choonkiatlee/raspbian:image-build
 
 on:
   push:
