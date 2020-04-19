@@ -1,4 +1,4 @@
-FROM choonkiatlee/qemu-raspbian:image_build as buster_slim_builder
+FROM choonkiatlee/raspbian:image-build as buster_slim_builder
 
 RUN qemu-debootstrap --variant='buildd' \
                     --keyring=/etc/apt/trusted.gpg \

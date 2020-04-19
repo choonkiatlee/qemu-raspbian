@@ -1,0 +1,26 @@
+name: choonkiatlee/raspbian:buster-build
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+    - 'Dockerfile'
+  pull_request:
+    branches: [ master ]
+    paths:
+    - 'Dockerfile'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Buster Build
+      run: docker build --tag choonkiatlee/raspbian:image-build .
+    - name: Login
+      run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+    - name: Publish Docker
+      run: docker push choonkiatlee/raspbian:image-build

@@ -1,0 +1,32 @@
+name: choonkiatlee/raspbian:buster-build
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+    - 'buster_faithful/Dockerfile'
+    - 'buster_faithful/build_buster_faithful.sh'
+    - '.github/workflows/build_buster_build.yml' # Trigger also on update of the workflow
+  pull_request:
+    branches: [ master ]
+    paths:
+    - 'buster_faithful/Dockerfile'
+    - 'buster_faithful/build_buster_faithful.sh'
+    - '.github/workflows/build_buster_build.yml' # Trigger also on update of the workflow
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install QEMU
+      run: sudo apt-get update && sudo apt-get install qemu-user-static qemu binfmt-support
+    - name: Build Buster Build
+      run: bash build_buster_faithful.sh
+    - name: Login
+      run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+    - name: Publish Docker
+      run: docker push choonkiatlee/raspbian:buster-faithful

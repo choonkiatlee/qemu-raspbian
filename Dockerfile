@@ -1,7 +1,7 @@
 FROM ubuntu:18.04 as base
 
 # Install common packages required
-FROM base as image_build
+FROM base as image-build
 
 RUN apt-get update && \
     apt-get install  -y --no-install-recommends \
@@ -18,7 +18,8 @@ RUN	sed -i 's/in_target mount -t proc/#in_target mount -t proc/g' /usr/share/deb
 RUN wget --no-check-certificate https://archive.raspbian.org/raspbian.public.key -O - | apt-key add -q
 
 
-################ Below are the individual docker files used to build the tagged images####################
+################ Below are the individual docker files used to build the tagged images ####################
+
 # ######################### Buster Build version #####################################
 
 # FROM choonkiatlee/qemu-raspbian:image_build as buster_build_builder
@@ -68,6 +69,9 @@ RUN wget --no-check-certificate https://archive.raspbian.org/raspbian.public.key
 # COPY --from=buster_slim_builder /rpi_rootfs /
 # CMD ["/bin/bash"]
 
-
+# ######################### Buster Faithful version #####################################
+# From scratch
+# ADD *.tgz /
+# CMD ["qemu-arm-static", "/bin/bash"]
 
 
