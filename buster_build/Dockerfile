@@ -20,6 +20,6 @@ RUN chroot /rpi_rootfs apt-get clean
 CMD ["chroot", "rpi_rootfs/", "/bin/bash"]
 
 # Create minimal boot file
-FROM scratch as buster_build_builder
-COPY --from=buster_build /rpi_rootfs /
+FROM scratch as buster_build
+COPY --from=buster_build_builder /rpi_rootfs /
 CMD ["/bin/bash"]
