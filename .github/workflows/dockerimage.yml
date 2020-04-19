@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install QEMU
+      run: sudo apt-get update && sudo apt-get install qemu-user-static qemu binfmt-support
+    - name: Build the Docker image
+      run: docker build . --file buster_slim/Dockerfile --tag choonkiatlee/qemu-raspbian:buster-slim
+    - name: Push the Docker Image
+      run: docker push choonkiatlee/qemu-raspbian:buster-slim
