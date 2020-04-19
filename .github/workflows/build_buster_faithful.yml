@@ -24,9 +24,11 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install QEMU
       run: sudo apt-get update && sudo apt-get install qemu-user-static qemu binfmt-support
-    - name: Build Buster Build
+    - name: Build Buster Faithful
       run: cd buster_faithful; bash build_buster_faithful.sh
     - name: Login
       run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
     - name: Publish Docker
       run: docker push choonkiatlee/raspbian:buster-faithful
+    - name: Publish Docker
+      run: docker push choonkiatlee/raspbian:faithful

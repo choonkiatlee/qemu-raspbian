@@ -46,7 +46,8 @@ sudo umount rpi_mnt
 sudo losetup -d /dev/loop0
 
 cd rpi_zipped_img
-docker build -f ../Dockerfile --tag choonkiatlee/raspbian:faithful .
+docker build -f ../Dockerfile --tag choonkiatlee/raspbian:buster-faithful .
+docker tag choonkiatlee/raspbian:buster-faithful choonkiatlee/raspbian:faithful
 
 cd ..
 sudo rm -r rpi_img rpi_mnt rpi_zipped_img
