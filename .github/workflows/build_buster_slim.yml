@@ -1,4 +1,4 @@
-name: choonkiatlee/qemu-raspbian:buster-slim
+name: choonkiatlee/raspbian:buster-slim
 
 on:
   push:

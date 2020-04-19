@@ -1,4 +1,4 @@
-name: choonkiatlee/qemu-raspbian:buster-build
+name: choonkiatlee/raspbian:buster-build
 
 on:
   push:
