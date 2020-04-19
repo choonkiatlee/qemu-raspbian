@@ -3,8 +3,14 @@ name: Docker Image CI
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'Dockerfile'
+    - '*/Dockerfile'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'Dockerfile'
+    - '*/Dockerfile'
 
 jobs:
 
@@ -16,9 +22,19 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install QEMU
       run: sudo apt-get update && sudo apt-get install qemu-user-static qemu binfmt-support
-    - name: Build Docker
-      run: docker build -f buster_slim/Dockerfile --tag choonkiatlee/qemu-raspbian:buster-slim .
+    - name: Build Buster Slim
+      run: docker build -f buster_slim/Dockerfile --tag choonkiatlee/qemu-raspbian:buster-slim --tag choonkiatlee/qemu-raspbian:slim .
+    - name: Build Buster Build
+      run: docker build -f buster_build/Dockerfile --tag choonkiatlee/qemu-raspbian:buster-build --tag choonkiatlee/qemu-raspbian:build --tag choonkiatlee/qemu-raspbian:latest .
     - name: Login
       run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
     - name: Publish Docker
       run: docker push choonkiatlee/qemu-raspbian:buster-slim
+    - name: Publish Docker
+      run: docker push choonkiatlee/qemu-raspbian:buster-build
+    - name: Publish Docker
+      run: docker push choonkiatlee/qemu-raspbian:build
+    - name: Publish Docker
+      run: docker push choonkiatlee/qemu-raspbian:slim
+    - name: Publish Docker
+      run: docker push choonkiatlee/qemu-raspbian:latest
