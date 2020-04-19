@@ -3,7 +3,7 @@
 # Download the latest Raspbian Image
 mkdir rpi_img
 cd rpi_img
-wget https://downloads.raspberrypi.org/raspbian_lite_latest
+wget -q https://downloads.raspberrypi.org/raspbian_lite_latest # -q for more sane logging
 
 # Unzip the Image
 RPI_IMG_FILENAME=`unzip -Z -1 raspbian_lite_latest`
@@ -29,7 +29,9 @@ sudo losetup -f -P --show rpi_img/$RPI_IMG_FILENAME
 sudo losetup --list
 ls /dev/loop0*
 
-sudo mount $LOOP_DEVICEp2 -o rw rpi_mnt
+echo ${LOOP_DEVICE}p2
+
+sudo mount ${LOOP_DEVICE}p2 -o rw rpi_mnt
 
 # sudo mount /dev/loop0p2 -o rw rpi_mnt
 
