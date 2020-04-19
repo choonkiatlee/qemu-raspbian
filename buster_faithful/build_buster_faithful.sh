@@ -22,11 +22,14 @@ rm raspbian_lite_latest
 cd ..
 mkdir rpi_mnt
 ls -lh rpi_img/$RPI_IMG_FILENAME
+
+LOOP_DEVICE=`sudo losetup -f`
+
 sudo losetup -f -P --show rpi_img/$RPI_IMG_FILENAME
 sudo losetup --list
 ls /dev/loop0*
 
-sudo mount /dev/loop0p2 -o rw rpi_mnt
+sudo mount $LOOP_DEVICEp2 -o rw rpi_mnt
 
 # sudo mount /dev/loop0p2 -o rw rpi_mnt
 
