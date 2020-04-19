@@ -2,6 +2,13 @@
 
 This is a Docker container that allows you to run raspbian using QEMU. This can be used for a variety of purposes, such as using your own computer to build ARM binaries for the Raspberry Pi.
 
+Available Tags and Description:
+
+choonkiatlee/qemu-raspbian:slim   => Minimal variant of Raspbian. Includes only Python3, git + minbase packages
+choonkiatlee/qemu-raspbian:build  => Raspbian with build-essential and blas installed. This is meant for easily building python packages such as numpy and pytorch for the Raspberry Pi
+
+choonkiatlee/qemu-raspbian:latest => Latest Build variant of Raspbian (Currently Buster)
+
 ## Pre-Requisites
 
 You need to install the qemu-user-static and binfmt-support packages (Both for building and running the docker containers). On your host system: 
@@ -22,56 +29,55 @@ docker run -it --rm choonkiatlee/raspbian-qemu:latest uname -a
 ```bash
 $ docker run -it --name numpy_builder choonkiatlee/raspbian-qemu:latest
 
-# ls dir to show that we are inside the R
-root@b0571199906e:/# uname -a
+####################### In Docker Container #######################
 
+# Install dependencies
 root@b0571199906e:/# apt-get update && apt-get install gfortran
-
 root@b0571199906e:/# pip3 install cython wheel
 
+# Collect numpy source
 root@b0571199906e:/# git clone https://github.com/numpy/numpy.git
-
 root@b0571199906e:/# cd numpy
 
+# Build Numpy
 root@b0571199906e:/# python3 setup.py build -j 4 bdist_wheel
-
 root@b0571199906e:/# exit
 
+####################### In Host #######################
+
+# Collect wheels from the docker container
 docker cp numpy_builder:/numpy/dist/*.whl .
 ```
 
 ## Example: Build Pytorch wheels (Time taken: )
 ```bash
-$ docker run -it --name numpy_builder choonkiatlee/raspbian-qemu:latest
+$ docker run -it --name pytorch_builder choonkiatlee/raspbian-qemu:latest
 
-# In Docker Container
-apt-get update && apt-get install -y python3-cffi python3-numpy
+####################### In Docker Container #######################
 
-pip3 install cython wheel
+# Install dependencies
+root@b0571199906e:/# apt-get update && apt-get install -y python3-cffi python3-numpy
+root@b0571199906e:/# pip3 install cython wheel
 
-git clone --recursive https://github.com/pytorch/pytorch
-
-cd pytorch
+# Collect Pytorch source
+root@b0571199906e:/# git clone --recursive https://github.com/pytorch/pytorch
+root@b0571199906e:/# cd pytorch
 
 # Configure pytorch build options
-export USE_CUDA=0
-export USE_CUDNN=0
-export USE_MKLDNN=0
-export USE_NNPACK=1
-export USE_QNNPACK=1
-export USE_DISTRIBUTED=0
-export BUILD_TEST=0
-export MAX_JOBS=4
+root@b0571199906e:/# export USE_CUDA=0
+root@b0571199906e:/# export USE_CUDNN=0
+root@b0571199906e:/# export USE_MKLDNN=0
+root@b0571199906e:/# export USE_NNPACK=1
+root@b0571199906e:/# export USE_QNNPACK=1
+root@b0571199906e:/# export USE_DISTRIBUTED=0
+root@b0571199906e:/# export BUILD_TEST=0
+root@b0571199906e:/# export MAX_JOBS=4
 
-python3 setup.py bdist_wheel
+# Build Pytorch
+root@b0571199906e:/# python3 setup.py bdist_wheel
 
+####################### In Host #######################
 
-
-
-# Install python dependencies
-root@b0571199906e:/# pip3 install cython wheel numpy cffi
-
-
-
-
+# Collect wheels from the docker container
+docker cp pytorch_builder:/pytorch/dist/*.whl .
 ```

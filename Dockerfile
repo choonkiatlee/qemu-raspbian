@@ -17,54 +17,56 @@ RUN	sed -i 's/in_target mount -t proc/#in_target mount -t proc/g' /usr/share/deb
 # Master Raspbian Repo from https://www.raspbian.org/RaspbianRepository
 RUN wget --no-check-certificate https://archive.raspbian.org/raspbian.public.key -O - | apt-key add -q
 
-######################### Buster Build version #####################################
 
-FROM choonkiatlee/qemu-raspbian:image_build as buster_build_builder
+################ Below are the individual docker files used to build the tagged images####################
+# ######################### Buster Build version #####################################
 
-RUN qemu-debootstrap --variant='buildd' \
-                    --keyring=/etc/apt/trusted.gpg \
-                    --include=libopenblas-dev,libblas-dev,cmake,python3-dev,git,python3-pip,python3-setuptools \
-                    --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian 
+# FROM choonkiatlee/qemu-raspbian:image_build as buster_build_builder
 
-# RUN debootstrap --variant='minbase' \
-#                     --foreign --no-check-gpg --include=ca-certificates \
+# RUN qemu-debootstrap --variant='buildd' \
 #                     --keyring=/etc/apt/trusted.gpg \
 #                     --include=libopenblas-dev,libblas-dev,cmake,python3-dev,git,python3-pip,python3-setuptools \
-#                     --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian && \
-#                     chroot -r /rpi_rootfs -q qemu-arm-static \
-# 		            /debootstrap/debootstrap --second-stage --verbose 
+#                     --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian 
 
-RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free rpi" >> /rpi_rootfs/etc/apt/sources.list
+# # RUN debootstrap --variant='minbase' \
+# #                     --foreign --no-check-gpg --include=ca-certificates \
+# #                     --keyring=/etc/apt/trusted.gpg \
+# #                     --include=libopenblas-dev,libblas-dev,cmake,python3-dev,git,python3-pip,python3-setuptools \
+# #                     --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian && \
+# #                     chroot -r /rpi_rootfs -q qemu-arm-static \
+# # 		            /debootstrap/debootstrap --second-stage --verbose 
 
-RUN chroot /rpi_rootfs apt-get clean
+# RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free rpi" >> /rpi_rootfs/etc/apt/sources.list
 
-CMD ["chroot", "rpi_rootfs/", "/bin/bash"]
+# RUN chroot /rpi_rootfs apt-get clean
 
-# Create minimal boot file
-FROM scratch as buster_build_builder
-COPY --from=buster_build /rpi_rootfs /
-CMD ["/bin/bash"]
+# CMD ["chroot", "rpi_rootfs/", "/bin/bash"]
 
-######################### Buster Slim version #####################################
+# # Create minimal boot file
+# FROM scratch as buster_build_builder
+# COPY --from=buster_build /rpi_rootfs /
+# CMD ["/bin/bash"]
 
-FROM choonkiatlee/qemu-raspbian:image_build as buster_slim_builder
+# ######################### Buster Slim version #####################################
 
-RUN qemu-debootstrap --variant='buildd' \
-                    --keyring=/etc/apt/trusted.gpg \
-                    --include=python3,git,python3-pip \
-                    --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian 
+# FROM choonkiatlee/qemu-raspbian:image_build as buster_slim_builder
 
-RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free rpi" >> /rpi_rootfs/etc/apt/sources.list
+# RUN qemu-debootstrap --variant='buildd' \
+#                     --keyring=/etc/apt/trusted.gpg \
+#                     --include=python3,git,python3-pip \
+#                     --arch armhf buster /rpi_rootfs http://archive.raspbian.org/raspbian 
 
-RUN chroot /rpi_rootfs apt-get clean
+# RUN echo "deb http://archive.raspbian.org/raspbian buster main contrib non-free rpi" >> /rpi_rootfs/etc/apt/sources.list
 
-# Just in case you want to check the builder image
-CMD ["chroot", "/rpi_rootfs/", "/bin/bash"]
+# RUN chroot /rpi_rootfs apt-get clean
 
-# Create minimal boot file
-FROM scratch as buster_slim
-COPY --from=buster_slim_builder /rpi_rootfs /
-CMD ["/bin/bash"]
+# # Just in case you want to check the builder image
+# CMD ["chroot", "/rpi_rootfs/", "/bin/bash"]
+
+# # Create minimal boot file
+# FROM scratch as buster_slim
+# COPY --from=buster_slim_builder /rpi_rootfs /
+# CMD ["/bin/bash"]
 
 
 

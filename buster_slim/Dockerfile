@@ -14,5 +14,6 @@ CMD ["chroot", "/rpi_rootfs/", "/bin/bash"]
 
 # Create minimal boot file
 FROM scratch as buster_slim
+LABEL maintainer="CK <choonkiat.lee@gmail.com>; https://github.com/choonkiatlee/qemu-raspbian"
 COPY --from=buster_slim_builder /rpi_rootfs /
 CMD ["/bin/bash"]
