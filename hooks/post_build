@@ -12,7 +12,6 @@ docker build --target buster_latest --tag choonkiatlee/qemu-raspbian:buster_late
 docker tag choonkiatlee/qemu-raspbian:buster_latest choonkiatlee/qemu-raspbian:latest
 docker push choonkiatlee/qemu-raspbian:latest
 
-
 # docker build --target buster_faithful_builder --tag $DOCKER_REPO/qemu-raspbian:buster_faithful_builder .
 docker build --target buster_faithful --tag choonkiatlee/qemu-raspbian:buster_faithful .
 
