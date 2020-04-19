@@ -10,8 +10,7 @@ RPI_IMG_FILENAME=`unzip -Z -1 raspbian_lite_latest`
 RPI_IMG_BASENAME="${RPI_IMG_FILENAME%.*}"
 
 # Debug purposes
-echo $RPI_IMG_FILENAME
-echo $RPI_IMG_BASENAME
+echo RPI_IMG_FILENAME: $RPI_IMG_FILENAME, RPI_IMG_BASENAME: $RPI_IMG_BASENAME
 
 unzip raspbian_lite_latest
 rm raspbian_lite_latest
@@ -26,13 +25,9 @@ ls -lh rpi_img/$RPI_IMG_FILENAME
 LOOP_DEVICE=`sudo losetup -f`
 
 sudo losetup -f -P --show rpi_img/$RPI_IMG_FILENAME
-sudo losetup --list
-ls /dev/loop0*
-
-echo ${LOOP_DEVICE}p2
+echo LOOP_DEVICE mounted on ${LOOP_DEVICE}p2
 
 sudo mount ${LOOP_DEVICE}p2 -o rw rpi_mnt
-
 # sudo mount /dev/loop0p2 -o rw rpi_mnt
 
 # Copy the quemu-arm-static binary into the image to be produced
@@ -53,6 +48,7 @@ sudo losetup -d /dev/loop0
 cd rpi_zipped_img
 docker build -f ../Dockerfile --tag choonkiatlee/raspbian:faithful .
 
+cd ..
 sudo rm -r rpi_img rpi_mnt rpi_zipped_img
 
 
