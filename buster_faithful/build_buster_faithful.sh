@@ -21,6 +21,7 @@ rm raspbian_lite_latest
 # because we cannot run certain privileged commands such as mount in a docker container during building
 cd ..
 mkdir rpi_mnt
+ls -lh rpi_img/$RPI_IMG_FILENAME
 sudo losetup -f -P --show rpi_img/$RPI_IMG_FILENAME
 sudo mount /dev/loop0p2 -o rw rpi_mnt
 
