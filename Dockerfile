@@ -7,6 +7,7 @@ RUN apt-get update && \
     apt-get install  -y --no-install-recommends \
             debootstrap \
             gnupg \
+            proot \
             qemu-user-static && \
     rm -rf /var/lib/apt/lists/*
 
