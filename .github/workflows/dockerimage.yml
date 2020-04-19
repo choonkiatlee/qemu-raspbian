@@ -16,11 +16,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install QEMU
       run: sudo apt-get update && sudo apt-get install qemu-user-static qemu binfmt-support
+    - name: Build Docker
+      run: docker build -f buster_slim/Dockerfile --tag choonkiatlee/qemu-raspbian:buster-slim .
+    - name: Login
+      run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
     - name: Publish Docker
-      uses: elgohr/Publish-Docker-Github-Action@2.14
-      with:
-        name: choonkiatlee/qemu-raspbian
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        dockerfile: buster_slim/Dockerfile
-        tags: slim,buster-slim    
+      run: docker push choonkiatlee/qemu-raspbian:buster-slim
