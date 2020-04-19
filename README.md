@@ -25,13 +25,15 @@ $ docker run -it --name numpy_builder choonkiatlee/raspbian-qemu:latest
 # ls dir to show that we are inside the R
 root@b0571199906e:/# uname -a
 
+root@b0571199906e:/# apt-get update && apt-get install gfortran
+
 root@b0571199906e:/# pip3 install cython wheel
 
 root@b0571199906e:/# git clone https://github.com/numpy/numpy.git
 
 root@b0571199906e:/# cd numpy
 
-root@b0571199906e:/# python3 setup.py bdist_wheel
+root@b0571199906e:/# python3 setup.py build -j 4 bdist_wheel
 
 root@b0571199906e:/# exit
 
@@ -40,5 +42,36 @@ docker cp numpy_builder:/numpy/dist/*.whl .
 
 ## Example: Build Pytorch wheels (Time taken: )
 ```bash
+$ docker run -it --name numpy_builder choonkiatlee/raspbian-qemu:latest
+
+# In Docker Container
+apt-get update && apt-get install -y python3-cffi python3-numpy
+
+pip3 install cython wheel
+
+git clone --recursive https://github.com/pytorch/pytorch
+
+cd pytorch
+
+# Configure pytorch build options
+export USE_CUDA=0
+export USE_CUDNN=0
+export USE_MKLDNN=0
+export USE_NNPACK=1
+export USE_QNNPACK=1
+export USE_DISTRIBUTED=0
+export BUILD_TEST=0
+export MAX_JOBS=4
+
+python3 setup.py bdist_wheel
+
+
+
+
+# Install python dependencies
+root@b0571199906e:/# pip3 install cython wheel numpy cffi
+
+
+
 
 ```

@@ -7,22 +7,27 @@ docker tag choonkiatlee/qemu-raspbian:buster-build choonkiatlee/qemu-raspbian:bu
 docker tag choonkiatlee/qemu-raspbian:buster-build choonkiatlee/qemu-raspbian:latest
 
 docker push choonkiatlee/qemu-raspbian:buster-build
-docker push choonkiatlee/qemu-raspbian:build
-docker push choonkiatlee/qemu-raspbian:latest
 
 cd ../buster_slim 
 docker build --tag choonkiatlee/qemu-raspbian:buster-slim .
 docker tag choonkiatlee/qemu-raspbian:buster-slim choonkiatlee/qemu-raspbian:slim
 
 docker push choonkiatlee/qemu-raspbian:buster-slim
-docker push choonkiatlee/qemu-raspbian:slim
 
 cd ../buster_faithful
 docker build --tag choonkiatlee/qemu-raspbian:buster-faithful .
 docker tag choonkiatlee/qemu-raspbian:buster-faithful choonkiatlee/qemu-raspbian:faithful
 
 docker push choonkiatlee/qemu-raspbian:buster-faithful
+
+# Push common tags
 docker push choonkiatlee/qemu-raspbian:faithful
+docker push choonkiatlee/qemu-raspbian:build
+docker push choonkiatlee/qemu-raspbian:slim
+
+docker push choonkiatlee/qemu-raspbian:latest
+
+
 
 #!/bin/bash
 
