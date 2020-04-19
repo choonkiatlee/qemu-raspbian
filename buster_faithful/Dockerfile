@@ -1,4 +1,4 @@
-FROM image_build as buster_faithful_builder
+FROM choonkiatlee/qemu-raspbian:image_build as buster_faithful_builder
 
 RUN qemu-debootstrap --keyring=/etc/apt/trusted.gpg \
                     --include=python3,git,python3-pip \
