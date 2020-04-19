@@ -25,7 +25,7 @@ jobs:
     - name: Install QEMU
       run: sudo apt-get update && sudo apt-get install qemu-user-static qemu binfmt-support
     - name: Build Buster Build
-      run: bash build_buster_faithful.sh
+      run: cd buster_faithful; bash build_buster_faithful.sh
     - name: Login
       run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
     - name: Publish Docker
