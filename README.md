@@ -1,6 +1,6 @@
 # Raspbian Docker QEMU
 
-This is a Docker container that allows you to run raspbian using QEMU user mode emulation. This can be used for a variety of purposes, such as using your own computer to build ARM binaries for the Raspberry Pi. These images have little hard CPU / RAM limits, and can take advantage of a significant portion of the computing power in your underlying hardware!
+This is a Docker container that allows you to run raspbian using QEMU user mode emulation. This can be used for a variety of purposes, such as using your own computer to build ARM binaries for the Raspberry Pi. These images have little hard CPU / RAM limits, and can take advantage of a significant portion of the computing power in your underlying hardware! ([blog post](https://choonkiatlee.github.io/posts/00002-raspbian-qemu/))
 
 ![Example](recording.svg)
 
@@ -31,34 +31,12 @@ docker run -it --rm choonkiatlee/raspbian:latest uname -a
 > Linux 44cb9fc4aa70 5.0.0-1036-azure #38-Ubuntu SMP Sun Mar 22 21:27:21 UTC 2020 armv7l GNU/Linux
 ```
 
-## Example: Build Numpy wheels for the Raspberry Pi
-
-```bash
-$ docker run -it --name numpy_builder choonkiatlee/raspbian:latest
-
-####################### In Docker Container #######################
-
-# Install dependencies
-root@b0571199906e:/# apt-get update && apt-get install gfortran
-root@b0571199906e:/# pip3 install cython wheel
-
-# Collect numpy source
-root@b0571199906e:/# git clone https://github.com/numpy/numpy.git
-root@b0571199906e:/# cd numpy
-
-# Build Numpy
-root@b0571199906e:/# python3 setup.py build -j 4 bdist_wheel
-root@b0571199906e:/# exit
-
-####################### In Host #######################
-
-# Collect wheels from the docker container
-docker cp numpy_builder:/numpy/dist/. .
-```
-
 ## Example: Build Pytorch wheels for the Raspberry Pi
+
+Detailed explanation [here](https://choonkiatlee.github.io/posts/00003-pi_torch/)
+
 ```bash
-$ docker run -it --name pytorch_builder choonkiatlee/raspbian:latest
+$ docker run -it --name pytorch_builder choonkiatlee/raspbian:build
 
 ####################### In Docker Container #######################
 
@@ -89,6 +67,32 @@ root@b0571199906e:/# python3 setup.py bdist_wheel
 docker cp pytorch_builder:/pytorch/dist/. .
 ```
 
+## Example: Build Numpy wheels for the Raspberry Pi
+
+```bash
+$ docker run -it --name numpy_builder choonkiatlee/raspbian:build
+
+####################### In Docker Container #######################
+
+# Install dependencies
+root@b0571199906e:/# apt-get update && apt-get install gfortran
+root@b0571199906e:/# pip3 install cython wheel
+
+# Collect numpy source
+root@b0571199906e:/# git clone https://github.com/numpy/numpy.git
+root@b0571199906e:/# cd numpy
+
+# Build Numpy
+root@b0571199906e:/# python3 setup.py build -j 4 bdist_wheel
+root@b0571199906e:/# exit
+
+####################### In Host #######################
+
+# Collect wheels from the docker container
+docker cp numpy_builder:/numpy/dist/. .
+```
+
+
 ## Build
 
 The building process is slightly different for the build/slim images and the faithful image.
@@ -118,6 +122,6 @@ bash build_buster_faithful.sh
 
 ## Credits and References
 
-[https://wiki.debian.org/RaspberryPi/qemu-user-static]
-[https://nmilosev.svbtle.com/compling-arm-stuff-without-an-arm-board-build-pytorch-for-the-raspberry-pi]
-[https://www.cnblogs.com/pengdonglin137/p/5020143.html#_lab2_0_0]
+- https://wiki.debian.org/RaspberryPi/qemu-user-static
+- https://nmilosev.svbtle.com/compling-arm-stuff-without-an-arm-board-build-pytorch-for-the-raspberry-pi
+- https://www.cnblogs.com/pengdonglin137/p/5020143.html#_lab2_0_0
